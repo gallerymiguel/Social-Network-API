@@ -4,7 +4,7 @@ import { Thought, User } from '../models/index.js';
 // Get all thoughts
 export const getAllThoughts = async (_req: Request, res: Response): Promise<void> => {
     try {
-        const thoughts = await Thought.find();
+        const thoughts = await Thought.find(); // .populate('reactions');
         res.status(200).json(thoughts);
     } catch (err) {
         res.status(500).json({ error: 'Unable to fetch thoughts', details: err });
@@ -14,7 +14,7 @@ export const getAllThoughts = async (_req: Request, res: Response): Promise<void
 // Get a single thought by ID
 export const getThoughtById = async (req: Request, res: Response): Promise<void> => {
     try {
-        const thought = await Thought.findById(req.params.id);
+        const thought = await Thought.findById(req.params.id); // .populate('reactions');
         if (!thought) {
             res.status(404).json({ message: 'No thought found with that ID' });
             return;
@@ -28,7 +28,7 @@ export const getThoughtById = async (req: Request, res: Response): Promise<void>
 // Create a new thought
 export const createThought = async (req: Request, res: Response): Promise<void> => {
     try {
-        const thought = await Thought.create(req.body);
+        const thought = await Thought.create(req.body); // Create a new thought
         await User.findByIdAndUpdate(req.body.userId, { $push: { thoughts: thought._id } });
         res.status(201).json(thought);
     } catch (err) {
